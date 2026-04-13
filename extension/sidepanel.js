@@ -13,7 +13,6 @@ const taskInput = document.getElementById('task-input');
 const submitBtn = document.getElementById('submit-btn');
 const toggleBtn = document.getElementById('toggle-btn');
 const newWindowBtn = document.getElementById('new-window-btn');
-const closeBtn = document.getElementById('close-btn');
 const entriesList = document.getElementById('entries-list');
 const entriesLabel = document.getElementById('entries-label');
 const headerStats = document.getElementById('header-stats');
@@ -466,10 +465,6 @@ toggleBtn.addEventListener('click', () => {
 
 newWindowBtn.addEventListener('click', () => {
   chrome.tabs.create({ url: chrome.runtime.getURL('sidepanel.html') });
-});
-
-closeBtn.addEventListener('click', () => {
-  window.close();
 });
 
 taskInput.addEventListener('keypress', (e) => {
