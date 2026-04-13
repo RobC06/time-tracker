@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Tracker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <div id="header">
+      <button id="close-btn" title="Close">&times;</button>
+      <h2>Time Tracker</h2>
+      <div id="header-stats">Today: 0.00h</div>
+    </div>
+
+    <!-- Entry Form -->
+    <div id="form-section">
+      <div class="form-group">
+        <input type="date" id="date-input">
+      </div>
+      <div class="form-group" style="position: relative;">
+        <input type="text" id="client-input" placeholder="Client" autocomplete="off">
+        <div id="client-suggestions"></div>
+      </div>
+      <div class="form-row">
+        <input type="number" id="time-input" step="0.25" placeholder="Hours">
+        <input type="text" id="task-input" placeholder="Task">
+      </div>
+      <div class="form-actions">
+        <button id="submit-btn">Add Entry</button>
+      </div>
+    </div>
+
+    <!-- View Toggle -->
+    <div id="view-toggle">
+      <span id="entries-label">Today's Entries</span>
+      <div class="toggle-buttons">
+        <button id="expand-btn" title="Open full site">&#8599;</button>
+        <button id="toggle-btn">View All</button>
+      </div>
+    </div>
+
+    <!-- Selection Toolbar (View All mode only) -->
+    <div id="selection-toolbar" style="display: none;">
+      <label class="select-all-label">
+        <input type="checkbox" id="select-all-checkbox">
+        <span>Select All</span>
+      </label>
+      <span id="selected-count">0 selected</span>
+      <button id="delete-selected-btn" disabled>Delete Selected</button>
+    </div>
+
+    <!-- Entries List -->
+    <div id="entries-list"></div>
+
+    <!-- Status Bar -->
+    <div id="status-bar">
+      <span id="status-dot"></span>
+      <span id="status-text">Connecting...</span>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
