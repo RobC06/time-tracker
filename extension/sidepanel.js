@@ -4,7 +4,6 @@ let inlineEditingId = null;
 let showAllEntries = false;
 let selectedIds = new Set();
 let savedClientNames = [];
-let isExpanded = false;
 
 // DOM Elements
 const dateInput = document.getElementById('date-input');
@@ -13,23 +12,17 @@ const timeInput = document.getElementById('time-input');
 const taskInput = document.getElementById('task-input');
 const submitBtn = document.getElementById('submit-btn');
 const toggleBtn = document.getElementById('toggle-btn');
+const newWindowBtn = document.getElementById('new-window-btn');
 const closeBtn = document.getElementById('close-btn');
 const entriesList = document.getElementById('entries-list');
 const entriesLabel = document.getElementById('entries-label');
 const headerStats = document.getElementById('header-stats');
-
-// Expand/collapse elements
-const expandToggleBtn = document.getElementById('expand-toggle-btn');
-const expandIcon = document.getElementById('expand-icon');
-const expandText = document.getElementById('expand-text');
-const entriesSection = document.getElementById('entries-section');
 
 // Status elements
 const statusDot = document.getElementById('status-dot');
 const statusText = document.getElementById('status-text');
 
 // Selection elements
-const selectionToolbar = document.getElementById('selection-toolbar');
 const selectAllCheckbox = document.getElementById('select-all-checkbox');
 const selectedCount = document.getElementById('selected-count');
 const deleteSelectedBtn = document.getElementById('delete-selected-btn');
@@ -301,7 +294,7 @@ function handleInlineSave(id) {
   updateEntry(id, data);
 }
 
-// Form submission (add only)
+// Form submission
 function handleSubmit() {
   const data = {
     date: dateInput.value,
@@ -323,22 +316,7 @@ function resetForm() {
   taskInput.value = '';
 }
 
-// Expand/Collapse functionality
-function toggleExpand() {
-  isExpanded = !isExpanded;
-
-  if (isExpanded) {
-    entriesSection.classList.remove('collapsed');
-    expandIcon.classList.add('expanded');
-    expandText.textContent = 'Hide Entries';
-  } else {
-    entriesSection.classList.add('collapsed');
-    expandIcon.classList.remove('expanded');
-    expandText.textContent = 'Show Entries';
-  }
-}
-
-// Group entries by date, then by client within each date
+// Group entries by date, then by client
 function groupByDateAndClient(entriesToGroup) {
   const grouped = {};
   entriesToGroup.forEach(entry => {
@@ -371,18 +349,12 @@ function getUniqueClients() {
 
 function showSuggestions() {
   const typed = clientInput.value.trim().toLowerCase();
-  if (!typed) {
-    clientSuggestions.style.display = 'none';
-    return;
-  }
+  if (!typed) { clientSuggestions.style.display = 'none'; return; }
   const matches = getUniqueClients().filter(c => c.toLowerCase().includes(typed));
   if (matches.length === 0 || (matches.length === 1 && matches[0].toLowerCase() === typed)) {
-    clientSuggestions.style.display = 'none';
-    return;
+    clientSuggestions.style.display = 'none'; return;
   }
-  clientSuggestions.innerHTML = matches.map(c =>
-    `<div class="suggestion-item">${escapeHtml(c)}</div>`
-  ).join('');
+  clientSuggestions.innerHTML = matches.map(c => `<div class="suggestion-item">${escapeHtml(c)}</div>`).join('');
   clientSuggestions.style.display = 'block';
 }
 
@@ -412,26 +384,19 @@ function render() {
 
   const displayEntries = showAllEntries ? entries : todayEntries;
 
-  // Update header stats
+  // Header stats
   let statsText = `Today: ${todayTotal.toFixed(2)}h`;
-  if (showAllEntries) {
-    statsText += ` \u2022 Total: ${allEntriesTotal.toFixed(2)}h`;
-  }
+  if (showAllEntries) statsText += ` \u2022 Total: ${allEntriesTotal.toFixed(2)}h`;
   headerStats.textContent = statsText;
 
-  // Update entries label
+  // Labels and buttons
   entriesLabel.textContent = showAllEntries ? 'All Entries' : "Today's Entries";
-
-  // Update toggle button
   toggleBtn.textContent = showAllEntries ? 'Show Today' : 'View All';
 
-  // Show/hide selection toolbar
+  // Selection toolbar only in View All mode
+  const selectionToolbar = document.getElementById('selection-toolbar');
   selectionToolbar.style.display = showAllEntries ? 'flex' : 'none';
-  if (showAllEntries) {
-    updateSelectionUI();
-  } else {
-    selectedIds.clear();
-  }
+  if (showAllEntries) updateSelectionUI();
 
   // Render entries
   if (displayEntries.length === 0) {
@@ -448,9 +413,7 @@ function render() {
 
     let dayTotal = 0;
     Object.keys(clients).forEach(clientKey => {
-      clients[clientKey].entries.forEach(e => {
-        dayTotal += parseFloat(e.time || 0);
-      });
+      clients[clientKey].entries.forEach(e => { dayTotal += parseFloat(e.time || 0); });
     });
 
     if (showAllEntries) {
@@ -472,9 +435,7 @@ function render() {
         const isChecked = selectedIds.has(entry.id) ? 'checked' : '';
         html += `<div class="task-item" data-id="${entry.id}">`;
         html += `<div class="task-row${showAllEntries ? ' task-row-selectable' : ''}">`;
-        if (showAllEntries) {
-          html += `<input type="checkbox" class="entry-checkbox" data-id="${entry.id}" ${isChecked}>`;
-        }
+        if (showAllEntries) html += `<input type="checkbox" class="entry-checkbox" data-id="${entry.id}" ${isChecked}>`;
         html += `<span class="task-text">${escapeHtml(entry.task)}</span>`;
         html += `<div class="task-right">`;
         html += `<span class="task-hours-badge">${escapeHtml(String(entry.time))}h</span>`;
@@ -488,9 +449,7 @@ function render() {
       html += `</div>`;
     });
 
-    if (showAllEntries) {
-      html += `</div>`;
-    }
+    if (showAllEntries) html += `</div>`;
   });
 
   entriesList.innerHTML = html;
@@ -501,10 +460,13 @@ submitBtn.addEventListener('click', handleSubmit);
 
 toggleBtn.addEventListener('click', () => {
   showAllEntries = !showAllEntries;
+  selectedIds.clear();
   render();
 });
 
-expandToggleBtn.addEventListener('click', toggleExpand);
+newWindowBtn.addEventListener('click', () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL('sidepanel.html') });
+});
 
 closeBtn.addEventListener('click', () => {
   window.close();
@@ -518,7 +480,6 @@ taskInput.addEventListener('keypress', (e) => {
 entriesList.addEventListener('click', (e) => {
   const target = e.target;
 
-  // Handle inline form buttons first
   if (target.classList.contains('inline-save-btn')) {
     const taskItem = target.closest('.task-item');
     if (taskItem) handleInlineSave(parseInt(taskItem.dataset.id));
@@ -545,7 +506,6 @@ entriesList.addEventListener('click', (e) => {
   }
 });
 
-// Selection toolbar event listeners
 selectAllCheckbox.addEventListener('change', toggleSelectAll);
 
 deleteSelectedBtn.addEventListener('click', () => {
