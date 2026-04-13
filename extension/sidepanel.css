@@ -326,18 +326,30 @@ body {
 }
 
 /* Icon action buttons */
+.copy-btn,
 .edit-btn,
 .delete-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 5px;
   border: 1.5px solid;
   cursor: pointer;
   padding: 0;
   transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.copy-btn {
+  color: #0369a1;
+  border-color: #0369a1;
+  background: #f0f9ff;
+}
+
+.copy-btn:hover {
+  background-color: #0369a1;
+  color: #fff;
 }
 
 .edit-btn {
@@ -362,6 +374,7 @@ body {
   color: #fff;
 }
 
+.copy-btn svg,
 .edit-btn svg,
 .delete-btn svg {
   pointer-events: none;
