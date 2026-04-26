@@ -359,6 +359,15 @@ body {
   background-color: #f0f4ff;
 }
 
+.non-billable-entry .task-text {
+  color: #d97706;
+}
+
+.non-billable-entry .task-hours-badge {
+  color: #d97706;
+  border-color: #d97706;
+}
+
 .task-row {
   display: flex;
   justify-content: space-between;

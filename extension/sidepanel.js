@@ -469,7 +469,8 @@ function render() {
 
       clientEntries.forEach(entry => {
         const isChecked = selectedIds.has(entry.id) ? 'checked' : '';
-        html += `<div class="task-item" data-id="${entry.id}">`;
+        const nonBillableClass = entry.billable === false ? ' non-billable-entry' : '';
+        html += `<div class="task-item${nonBillableClass}" data-id="${entry.id}">`;
         html += `<div class="task-row${showAllEntries ? ' task-row-selectable' : ''}">`;
         if (showAllEntries) html += `<input type="checkbox" class="entry-checkbox" data-id="${entry.id}" ${isChecked}>`;
         html += `<span class="task-text">${escapeHtml(entry.task)}</span>`;
