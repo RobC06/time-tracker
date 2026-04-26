@@ -103,6 +103,7 @@ async function createEntry(entry) {
     });
     if (response.ok) {
       const newEntry = await response.json();
+      if (newEntry.billable === undefined) newEntry.billable = entry.billable;
       entries.unshift(newEntry);
       saveClientName(entry.client);
       setStatus('connected', 'Saved');
@@ -126,6 +127,7 @@ async function updateEntry(id, data) {
     });
     if (response.ok) {
       const updated = await response.json();
+      if (updated.billable === undefined) updated.billable = data.billable;
       entries = entries.map(e => e.id === id ? updated : e);
       setStatus('connected', 'Updated');
     } else {
