@@ -68,6 +68,35 @@ body {
   margin-top: 4px;
   color: #69F0AE;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stats-badges {
+  display: flex;
+  gap: 4px;
+}
+
+.stats-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.billable-badge {
+  background: rgba(0, 123, 255, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(0, 123, 255, 0.3);
+}
+
+.non-billable-badge {
+  background: rgba(156, 163, 175, 0.2);
+  color: #d1d5db;
+  border: 1px solid rgba(156, 163, 175, 0.3);
 }
 
 /* Form Section */
@@ -132,6 +161,26 @@ body {
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 13px;
+}
+
+.form-check {
+  margin-bottom: 10px;
+}
+
+.non-billable-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+}
+
+.non-billable-label input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
 }
 
 .form-actions {
@@ -241,6 +290,12 @@ body {
   border-bottom: 1px solid #d0d0d0;
 }
 
+.date-heading-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .date-heading .date-total {
   color: #007bff;
   font-weight: 700;
@@ -269,6 +324,19 @@ body {
   font-size: 14px;
   font-weight: 600;
   color: #212529;
+}
+
+.client-group-hours-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.client-group-hours-wrap .billable-badge,
+.client-group-hours-wrap .non-billable-badge {
+  color: #555;
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.12);
 }
 
 .client-group-hours {
@@ -415,6 +483,17 @@ body {
 .inline-task {
   display: block;
   margin-bottom: 6px;
+}
+
+.inline-non-billable-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #555;
+  cursor: pointer;
+  margin-bottom: 6px;
+  user-select: none;
 }
 
 .inline-edit-actions {

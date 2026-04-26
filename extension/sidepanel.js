@@ -11,6 +11,7 @@ const clientInput = document.getElementById('client-input');
 const timeInput = document.getElementById('time-input');
 const taskInput = document.getElementById('task-input');
 const submitBtn = document.getElementById('submit-btn');
+const nonBillableInput = document.getElementById('non-billable-input');
 const toggleBtn = document.getElementById('toggle-btn');
 const newWindowBtn = document.getElementById('new-window-btn');
 const entriesList = document.getElementById('entries-list');
@@ -243,6 +244,7 @@ function openInlineEdit(entry) {
 
   const form = document.createElement('div');
   form.className = 'inline-edit-form';
+  const nonBillableChecked = entry.billable === false ? 'checked' : '';
   form.innerHTML = `
     <div class="inline-edit-row-top">
       <input type="date" class="inline-input inline-date" value="${escapeHtml(entry.date)}">
@@ -250,6 +252,10 @@ function openInlineEdit(entry) {
       <input type="number" class="inline-input inline-hours" step="0.25" value="${escapeHtml(String(entry.time))}" placeholder="Hours">
     </div>
     <input type="text" class="inline-input inline-task" value="${escapeHtml(entry.task)}" placeholder="Task">
+    <label class="inline-non-billable-label">
+      <input type="checkbox" class="inline-non-billable" ${nonBillableChecked}>
+      <span>Non-billable</span>
+    </label>
     <div class="inline-edit-actions">
       <button class="inline-cancel-btn">Cancel</button>
       <button class="inline-save-btn">Save</button>
@@ -284,7 +290,8 @@ function handleInlineSave(id) {
     date: form.querySelector('.inline-date').value,
     client: form.querySelector('.inline-client').value.trim(),
     time: form.querySelector('.inline-hours').value,
-    task: form.querySelector('.inline-task').value.trim()
+    task: form.querySelector('.inline-task').value.trim(),
+    billable: !form.querySelector('.inline-non-billable').checked
   };
 
   if (!data.client || !data.time || !data.task) return;
@@ -299,6 +306,7 @@ function prefillForm(entry) {
   clientInput.value = entry.client;
   timeInput.value = entry.time;
   taskInput.value = entry.task;
+  nonBillableInput.checked = entry.billable === false;
   dateInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   clientInput.focus();
 }
@@ -309,20 +317,23 @@ function handleSubmit() {
     date: dateInput.value,
     client: clientInput.value,
     time: timeInput.value,
-    task: taskInput.value
+    task: taskInput.value,
+    billable: !nonBillableInput.checked
   };
 
   if (!data.client || !data.time || !data.task) return;
 
+  const submittedDate = dateInput.value;
   createEntry({ ...data, id: Date.now() });
-  resetForm();
+  resetForm(submittedDate);
 }
 
-function resetForm() {
-  dateInput.value = getTodayEastern();
+function resetForm(keepDate) {
+  dateInput.value = keepDate || getTodayEastern();
   clientInput.value = '';
   timeInput.value = '';
   taskInput.value = '';
+  nonBillableInput.checked = false;
 }
 
 // Group entries by date, then by client
@@ -389,14 +400,17 @@ function render() {
   const todayString = getTodayEastern();
   const todayEntries = entries.filter(e => e.date === todayString);
   const todayTotal = todayEntries.reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
-  const allEntriesTotal = entries.reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
+  const todayBillable = todayEntries.filter(e => e.billable !== false).reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
+  const todayNonBillable = todayTotal - todayBillable;
 
   const displayEntries = showAllEntries ? entries : todayEntries;
 
   // Header stats
-  let statsText = `Today: ${todayTotal.toFixed(2)}h`;
-  if (showAllEntries) statsText += ` \u2022 Total: ${allEntriesTotal.toFixed(2)}h`;
-  headerStats.textContent = statsText;
+  let statsHtml = `Today: ${todayTotal.toFixed(2)}h`;
+  if (todayNonBillable > 0) {
+    statsHtml += `<span class="stats-badges"><span class="stats-badge billable-badge">B: ${todayBillable.toFixed(2)}h</span><span class="stats-badge non-billable-badge">NB: ${todayNonBillable.toFixed(2)}h</span></span>`;
+  }
+  headerStats.innerHTML = statsHtml;
 
   // Labels and buttons
   entriesLabel.textContent = showAllEntries ? 'All Entries' : "Today's Entries";
@@ -426,18 +440,31 @@ function render() {
     });
 
     if (showAllEntries) {
+      const dayBillable = Object.values(clients).flatMap(c => c.entries).filter(e => e.billable !== false).reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
+      const dayNonBillable = dayTotal - dayBillable;
+      let dayBadges = dayNonBillable > 0
+        ? `<span class="stats-badge billable-badge">B: ${dayBillable.toFixed(2)}h</span><span class="stats-badge non-billable-badge">NB: ${dayNonBillable.toFixed(2)}h</span>`
+        : '';
       html += `<div class="date-section">`;
-      html += `<div class="date-heading"><span>${escapeHtml(date)}</span><span class="date-total">${dayTotal.toFixed(2)}h</span></div>`;
+      html += `<div class="date-heading"><span>${escapeHtml(date)}</span><span class="date-heading-right"><span class="date-badges">${dayBadges}</span><span class="date-total">${dayTotal.toFixed(2)}h</span></span></div>`;
     }
 
     Object.keys(clients).forEach(clientKey => {
       const { displayName, entries: clientEntries } = clients[clientKey];
       const clientTotal = clientEntries.reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
+      const clientBillable = clientEntries.filter(e => e.billable !== false).reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
+      const clientNonBillable = clientTotal - clientBillable;
 
       html += `<div class="client-group">`;
       html += `<div class="client-group-header">`;
       html += `<span class="client-group-name">${escapeHtml(displayName)}</span>`;
+      html += `<span class="client-group-hours-wrap">`;
+      if (clientNonBillable > 0) {
+        html += `<span class="stats-badge billable-badge">B: ${clientBillable.toFixed(2)}h</span>`;
+        html += `<span class="stats-badge non-billable-badge">NB: ${clientNonBillable.toFixed(2)}h</span>`;
+      }
       html += `<span class="client-group-hours">${clientTotal.toFixed(2)}h</span>`;
+      html += `</span>`;
       html += `</div>`;
 
       clientEntries.forEach(entry => {
