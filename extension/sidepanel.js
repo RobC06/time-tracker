@@ -454,7 +454,8 @@ function render() {
         dayBadges += `<span class="stats-badge non-billable-badge">NB: ${dayNonBillable.toFixed(2)}h</span>`;
       }
       html += `<div class="date-section">`;
-      html += `<div class="date-heading"><span>${escapeHtml(date)}</span><span class="date-heading-right"><span class="date-badges">${dayBadges}</span><span class="date-total${dayAllNonBillable ? ' all-nonbillable' : ''}">${dayTotal.toFixed(2)}h</span></span></div>`;
+      const dayTotalClass = dayAllNonBillable ? ' all-nonbillable' : dayMixed ? ' mixed' : '';
+      html += `<div class="date-heading"><span>${escapeHtml(date)}</span><span class="date-heading-right"><span class="date-badges">${dayBadges}</span><span class="date-total${dayTotalClass}">${dayTotal.toFixed(2)}h</span></span></div>`;
     }
 
     Object.keys(clients).forEach(clientKey => {

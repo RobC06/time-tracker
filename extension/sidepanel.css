@@ -302,8 +302,12 @@ body {
 }
 
 .date-heading .date-total {
-  color: #374151;
+  color: #007bff;
   font-weight: 700;
+}
+
+.date-heading .date-total.mixed {
+  color: #374151;
 }
 
 .date-heading .date-total.all-nonbillable {
