@@ -84,7 +84,7 @@ app.get('/api/time-entries', async (req, res) => {
       client: e.client,
       time: e.time,
       task: e.task,
-      billable: e.billable !== false
+      billable: e.billable === false ? false : true
     }));
     res.json(transformed);
   } catch (error) {
@@ -123,7 +123,7 @@ app.post('/api/time-entries', async (req, res) => {
       client: entry.client,
       time: entry.time,
       task: entry.task,
-      billable: entry.billable !== false
+      billable: entry.billable === false ? false : true
     });
   } catch (error) {
     console.error('Error creating time entry:', error);
@@ -150,7 +150,7 @@ app.put('/api/time-entries/:id', async (req, res) => {
       client: entry.client,
       time: entry.time,
       task: entry.task,
-      billable: entry.billable !== false
+      billable: entry.billable === false ? false : true
     });
   } catch (error) {
     console.error('Error updating time entry:', error);
