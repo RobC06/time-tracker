@@ -350,6 +350,10 @@ body {
   color: #007bff;
 }
 
+.client-group-hours.all-nonbillable {
+  color: #d97706;
+}
+
 /* Task Item */
 .task-item {
   padding: 6px 10px;

@@ -446,9 +446,11 @@ function render() {
     if (showAllEntries) {
       const dayBillable = Object.values(clients).flatMap(c => c.entries).filter(e => e.billable !== false).reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
       const dayNonBillable = dayTotal - dayBillable;
-      let dayBadges = dayNonBillable > 0
-        ? `<span class="stats-badge billable-badge">B: ${dayBillable.toFixed(2)}h</span><span class="stats-badge non-billable-badge">NB: ${dayNonBillable.toFixed(2)}h</span>`
-        : '';
+      let dayBadges = '';
+      if (dayNonBillable > 0) {
+        if (dayBillable > 0) dayBadges += `<span class="stats-badge billable-badge">B: ${dayBillable.toFixed(2)}h</span>`;
+        dayBadges += `<span class="stats-badge non-billable-badge">NB: ${dayNonBillable.toFixed(2)}h</span>`;
+      }
       html += `<div class="date-section">`;
       html += `<div class="date-heading"><span>${escapeHtml(date)}</span><span class="date-heading-right"><span class="date-badges">${dayBadges}</span><span class="date-total">${dayTotal.toFixed(2)}h</span></span></div>`;
     }
@@ -462,12 +464,13 @@ function render() {
       html += `<div class="client-group">`;
       html += `<div class="client-group-header">`;
       html += `<span class="client-group-name">${escapeHtml(displayName)}</span>`;
+      const allNonBillable = clientBillable === 0 && clientTotal > 0;
       html += `<span class="client-group-hours-wrap">`;
       if (clientNonBillable > 0) {
-        html += `<span class="stats-badge billable-badge">B: ${clientBillable.toFixed(2)}h</span>`;
+        if (clientBillable > 0) html += `<span class="stats-badge billable-badge">B: ${clientBillable.toFixed(2)}h</span>`;
         html += `<span class="stats-badge non-billable-badge">NB: ${clientNonBillable.toFixed(2)}h</span>`;
       }
-      html += `<span class="client-group-hours">${clientTotal.toFixed(2)}h</span>`;
+      html += `<span class="client-group-hours${allNonBillable ? ' all-nonbillable' : ''}">${clientTotal.toFixed(2)}h</span>`;
       html += `</span>`;
       html += `</div>`;
 
