@@ -102,7 +102,7 @@ app.post('/api/time-entries', async (req, res) => {
       client: req.body.client,
       time: req.body.time,
       task: req.body.task,
-      billable: req.body.billable !== false
+      billable: typeof req.body.billable === 'boolean' ? req.body.billable : true
     });
     await entry.save();
 
@@ -134,16 +134,20 @@ app.post('/api/time-entries', async (req, res) => {
 // Update time entry
 app.put('/api/time-entries/:id', async (req, res) => {
   try {
-    const entry = await TimeEntry.findOne({ entryId: parseInt(req.params.id) });
+    const fields = {};
+    if (req.body.date !== undefined) fields.date = req.body.date;
+    if (req.body.client !== undefined) fields.client = req.body.client;
+    if (req.body.time !== undefined) fields.time = req.body.time;
+    if (req.body.task !== undefined) fields.task = req.body.task;
+    if (typeof req.body.billable === 'boolean') fields.billable = req.body.billable;
+    const entry = await TimeEntry.findOneAndUpdate(
+      { entryId: parseInt(req.params.id) },
+      { $set: fields },
+      { new: true }
+    );
     if (!entry) {
       return res.status(404).json({ error: 'Time entry not found' });
     }
-    if (req.body.date !== undefined) entry.date = req.body.date;
-    if (req.body.client !== undefined) entry.client = req.body.client;
-    if (req.body.time !== undefined) entry.time = req.body.time;
-    if (req.body.task !== undefined) entry.task = req.body.task;
-    if (req.body.billable !== undefined) entry.billable = req.body.billable !== false;
-    await entry.save();
     res.json({
       id: entry.entryId,
       date: entry.date,
