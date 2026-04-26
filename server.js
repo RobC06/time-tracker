@@ -134,20 +134,21 @@ app.post('/api/time-entries', async (req, res) => {
 // Update time entry
 app.put('/api/time-entries/:id', async (req, res) => {
   try {
-    const fields = {};
-    if (req.body.date !== undefined) fields.date = req.body.date;
-    if (req.body.client !== undefined) fields.client = req.body.client;
-    if (req.body.time !== undefined) fields.time = req.body.time;
-    if (req.body.task !== undefined) fields.task = req.body.task;
-    if (typeof req.body.billable === 'boolean') fields.billable = req.body.billable;
-    const entry = await TimeEntry.findOneAndUpdate(
-      { entryId: parseInt(req.params.id) },
-      { $set: fields },
-      { new: true }
-    );
+    console.log('[PUT] entry', req.params.id, 'body:', JSON.stringify(req.body));
+    const entry = await TimeEntry.findOne({ entryId: parseInt(req.params.id) });
     if (!entry) {
       return res.status(404).json({ error: 'Time entry not found' });
     }
+    if (req.body.date !== undefined) entry.date = req.body.date;
+    if (req.body.client !== undefined) entry.client = req.body.client;
+    if (req.body.time !== undefined) entry.time = req.body.time;
+    if (req.body.task !== undefined) entry.task = req.body.task;
+    if (typeof req.body.billable === 'boolean') {
+      entry.billable = req.body.billable;
+      entry.markModified('billable');
+    }
+    await entry.save();
+    console.log('[PUT] saved billable=', entry.billable);
     res.json({
       id: entry.entryId,
       date: entry.date,
