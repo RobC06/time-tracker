@@ -64,19 +64,24 @@ body {
 }
 
 #header-stats {
-  font-size: 13px;
-  margin-top: 4px;
-  color: #69F0AE;
-  font-weight: 500;
+  margin-top: 6px;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.stats-badges {
-  display: flex;
-  gap: 4px;
+.stat-item {
+  font-size: 12px;
+  font-weight: 500;
+  color: #69F0AE;
+}
+
+.billable-stat {
+  color: #60a5fa;
+}
+
+.nonbillable-stat {
+  color: #fbbf24;
 }
 
 .stats-badge {

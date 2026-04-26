@@ -405,12 +405,12 @@ function render() {
 
   const displayEntries = showAllEntries ? entries : todayEntries;
 
-  // Header stats
-  let statsHtml = `Today: ${todayTotal.toFixed(2)}h`;
-  if (todayNonBillable > 0) {
-    statsHtml += `<span class="stats-badges"><span class="stats-badge billable-badge">B: ${todayBillable.toFixed(2)}h</span><span class="stats-badge non-billable-badge">NB: ${todayNonBillable.toFixed(2)}h</span></span>`;
-  }
-  headerStats.innerHTML = statsHtml;
+  // Header stats — always show total, billable, non-billable
+  headerStats.innerHTML = `
+    <span class="stat-item">Total: ${todayTotal.toFixed(2)}h</span>
+    <span class="stat-item billable-stat">Billable: ${todayBillable.toFixed(2)}h</span>
+    <span class="stat-item nonbillable-stat">Non-billable: ${todayNonBillable.toFixed(2)}h</span>
+  `;
 
   // Labels and buttons
   entriesLabel.textContent = showAllEntries ? 'All Entries' : "Today's Entries";
