@@ -306,6 +306,10 @@ body {
   font-weight: 700;
 }
 
+.date-heading .date-total.all-nonbillable {
+  color: #d97706;
+}
+
 /* Client Group */
 .client-group {
   margin-bottom: 14px;
