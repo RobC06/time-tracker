@@ -72,51 +72,6 @@ async function getSettings() {
   return settings;
 }
 
-// ============ ONE-TIME DATA MIGRATION ============
-
-// GET /api/migrate-from-old — pulls all entries from the old service and inserts them here.
-// Safe to call multiple times (skips entries that already exist by entryId).
-// Remove this endpoint once migration is confirmed complete.
-app.get('/api/migrate-from-old', async (req, res) => {
-  try {
-    const OLD = 'https://robc06-production.up.railway.app/api/time-entries';
-    const response = await fetch(OLD);
-    if (!response.ok) {
-      return res.status(502).json({ error: `Old service returned HTTP ${response.status}` });
-    }
-    const entries = await response.json();
-    let imported = 0, skipped = 0, failed = 0;
-
-    for (const e of entries) {
-      const exists = await TimeEntry.findOne({ entryId: Number(e.id) });
-      if (exists) { skipped++; continue; }
-      try {
-        await new TimeEntry({
-          entryId: Number(e.id),
-          date: e.date,
-          client: e.client,
-          time: e.time,
-          task: e.task,
-          billable: e.billable !== false
-        }).save();
-        if (e.client) {
-          const name = e.client.trim();
-          const existing = await ClientName.findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') } });
-          if (!existing) await new ClientName({ name }).save();
-        }
-        imported++;
-      } catch (err) {
-        failed++;
-        console.error('[MIGRATE] failed entry', e.id, err.message);
-      }
-    }
-
-    res.json({ total: entries.length, imported, skipped, failed });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // ============ TIME ENTRY API (for Chrome extension) ============
 
 // Get all time entries
