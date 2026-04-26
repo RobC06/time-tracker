@@ -407,13 +407,13 @@ function render() {
   const statsTotal = statsEntries.reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
   const statsBillable = statsEntries.filter(e => e.billable !== false).reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
   const statsNonBillable = statsTotal - statsBillable;
-  const statsLabel = showAllEntries ? 'All' : 'Today';
+  const statsLabel = showAllEntries ? 'ALL' : 'TODAY';
 
   // Header stats — always show total, billable, non-billable
   headerStats.innerHTML = `
     <span class="stat-item">${statsLabel}: ${statsTotal.toFixed(2)}h</span>
-    <span class="stat-item billable-stat">Billable: ${statsBillable.toFixed(2)}h</span>
-    <span class="stat-item nonbillable-stat">Non-billable: ${statsNonBillable.toFixed(2)}h</span>
+    <span class="stat-item billable-stat">BILL: ${statsBillable.toFixed(2)}h</span>
+    <span class="stat-item nonbillable-stat">NB: ${statsNonBillable.toFixed(2)}h</span>
   `;
 
   // Labels and buttons

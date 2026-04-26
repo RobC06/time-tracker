@@ -44,7 +44,7 @@ body {
   width: 24px;
   height: 24px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,7 +58,7 @@ body {
 
 #header h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   padding-right: 30px;
 }
@@ -66,13 +66,14 @@ body {
 #header-stats {
   margin-top: 6px;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .stat-item {
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   color: #69F0AE;
 }
 
@@ -85,7 +86,7 @@ body {
 }
 
 .stats-badge {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 999px;
@@ -120,7 +121,7 @@ body {
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
-  font-size: 13px;
+  font-size: 15px;
   font-family: inherit;
   box-sizing: border-box;
 }
@@ -144,7 +145,7 @@ body {
 
 #client-suggestions .suggestion-item {
   padding: 6px 8px;
-  font-size: 13px;
+  font-size: 15px;
   color: #333;
   cursor: pointer;
 }
@@ -165,7 +166,7 @@ body {
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .form-check {
@@ -176,7 +177,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 14px;
   color: #555;
   cursor: pointer;
   user-select: none;
@@ -201,7 +202,7 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
 }
 
@@ -228,7 +229,7 @@ body {
 }
 
 #entries-label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #333;
 }
@@ -240,7 +241,7 @@ body {
 
 #toggle-btn {
   padding: 4px 10px;
-  font-size: 12px;
+  font-size: 14px;
   background-color: #e9ecef;
   border: none;
   border-radius: 4px;
@@ -264,7 +265,7 @@ body {
   text-align: center;
   padding: 30px 20px;
   color: #6c757d;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 /* Date Section (groups date heading + entries for alternating shading) */
@@ -287,7 +288,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: #333;
   padding: 4px 0 6px 0;
@@ -346,7 +347,7 @@ body {
 }
 
 .client-group-name {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #212529;
 }
@@ -365,7 +366,7 @@ body {
 }
 
 .client-group-hours {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: #007bff;
 }
@@ -404,7 +405,7 @@ body {
 }
 
 .task-text {
-  font-size: 13px;
+  font-size: 15px;
   color: #212529;
   line-height: 1.4;
   flex: 1;
@@ -420,7 +421,7 @@ body {
 
 /* Hours badge */
 .task-hours-badge {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   color: #007bff;
   border: 1.5px solid #212529;
@@ -506,7 +507,7 @@ body {
   padding: 5px 7px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 14px;
   font-family: inherit;
   box-sizing: border-box;
   background-color: #fff;
@@ -527,7 +528,7 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 11px;
+  font-size: 13px;
   color: #555;
   cursor: pointer;
   margin-bottom: 6px;
@@ -547,7 +548,7 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -562,7 +563,7 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .inline-cancel-btn:hover {
@@ -577,7 +578,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 13px;
   color: #6c757d;
 }
 
@@ -609,7 +610,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .select-all-label {
@@ -639,7 +640,7 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
 }
 
