@@ -21,6 +21,10 @@ const timeEntrySchema = new mongoose.Schema({
   task: {
     type: String,
     required: true
+  },
+  billable: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true

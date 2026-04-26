@@ -399,17 +399,19 @@ function render() {
 
   const todayString = getTodayEastern();
   const todayEntries = entries.filter(e => e.date === todayString);
-  const todayTotal = todayEntries.reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
-  const todayBillable = todayEntries.filter(e => e.billable !== false).reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
-  const todayNonBillable = todayTotal - todayBillable;
-
   const displayEntries = showAllEntries ? entries : todayEntries;
+  const statsEntries = showAllEntries ? entries : todayEntries;
+
+  const statsTotal = statsEntries.reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
+  const statsBillable = statsEntries.filter(e => e.billable !== false).reduce((sum, e) => sum + parseFloat(e.time || 0), 0);
+  const statsNonBillable = statsTotal - statsBillable;
+  const statsLabel = showAllEntries ? 'All' : 'Today';
 
   // Header stats — always show total, billable, non-billable
   headerStats.innerHTML = `
-    <span class="stat-item">Total: ${todayTotal.toFixed(2)}h</span>
-    <span class="stat-item billable-stat">Billable: ${todayBillable.toFixed(2)}h</span>
-    <span class="stat-item nonbillable-stat">Non-billable: ${todayNonBillable.toFixed(2)}h</span>
+    <span class="stat-item">${statsLabel}: ${statsTotal.toFixed(2)}h</span>
+    <span class="stat-item billable-stat">Billable: ${statsBillable.toFixed(2)}h</span>
+    <span class="stat-item nonbillable-stat">Non-billable: ${statsNonBillable.toFixed(2)}h</span>
   `;
 
   // Labels and buttons
