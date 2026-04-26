@@ -85,7 +85,7 @@ body {
 }
 
 .stats-badge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 999px;
@@ -302,7 +302,7 @@ body {
 }
 
 .date-heading .date-total {
-  color: #007bff;
+  color: #374151;
   font-weight: 700;
 }
 
